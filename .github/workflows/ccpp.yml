@@ -17,7 +17,7 @@ jobs:
     - name: DirectX
       run: |
         choco install directx
-        tree C:\ProgramData\chocolatey\
+        tree C:/ProgramData/chocolatey
         exit 1
  
     - name: Build
