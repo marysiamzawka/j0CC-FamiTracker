@@ -15,7 +15,10 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
  
     - name: DirectX
-      run: choco install directx
+      run: |
+        choco install directx
+        tree C:\ProgramData\chocolatey\
+        exit 1
  
     - name: Build
       run: msbuild 0CC-FamiTracker.vcxproj /m /verbosity:minimal /p:Configuration=Release
