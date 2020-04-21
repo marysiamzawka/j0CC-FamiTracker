@@ -1362,7 +1362,7 @@ void CSoundGen::HaltPlayer()
 		if (m_pDocument->ExpansionEnabled(SNDCHIP_FDS))
 			*reinterpret_cast<int*>(Header + 0x84) |= 0x80000000;
 		if (m_pDocument->ExpansionEnabled(SNDCHIP_S5B)) {
-			*reinterpret_cast<int*>(Header + 0x74) = CAPU::BASE_FREQ_NTSC / 2;
+			*reinterpret_cast<int*>(Header + 0x74) = CAPU::BASE_FREQ_NTSC;
 			*reinterpret_cast<int*>(Header + 0x78) = 0x0110;
 		}
 	}
