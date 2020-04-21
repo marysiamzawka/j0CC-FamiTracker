@@ -91,7 +91,7 @@ double CS5BChannel::GetFrequency() const		// // //
 {
 	if (m_bSquareDisable || !m_iPeriod)
 		return 0.;
-	return CAPU::BASE_FREQ_NTSC;
+	return CAPU::BASE_FREQ_NTSC / 2. / m_iPeriod;
 }
 
 
