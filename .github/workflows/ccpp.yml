@@ -1,30 +1,43 @@
 name: Build
-
 on: [push]
+
+env:
+ DXSDK_DIR:  C:\Users\runneradmin\cache\dependencies\DX2010\DXSDK\
  
 jobs:
   build:
- 
     runs-on: windows-latest
  
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v1
-     
-    - name: Setup MSBuild
-      uses: warrenbuckley/Setup-MSBuild@v1
- 
-    - name: DirectX
-      run: |
-        choco install directx
-        tree "C:/Program Files (x86)/Microsoft DirectX SDK"
-        exit 1
- 
-    - name: Build
-      run: msbuild 0CC-FamiTracker.vcxproj /m /verbosity:minimal /p:Configuration=Release
+    - name:  Checkout Code
+      uses:  actions/checkout@v1
 
-    - name: Upload
-      uses: actions/upload-artifact@v1.0.0
+    - name:  Cache
+      id:    cache
+      uses:  actions/cache@v1
+      with:
+       path: ~/cache/dependencies
+       key:  cache-dependencies
+     
+    - name:  Setup MSBuild
+      uses:  warrenbuckley/Setup-MSBuild@v1
+ 
+    - name:  DirectX
+      shell: bash
+      if:    steps.cache.outputs.cache-hit != 'true'
+      run:   |
+        mkdir -p ~/cache/dependencies/DX2010
+        cd ~/cache/dependencies/
+        curl -L https://download.microsoft.com/download/a/e/7/ae743f1f-632b-4809-87a9-aa1bb3458e31/DXSDK_Jun10.exe -o DX2010.exe
+        7z x DX2010.exe DXSDK/Include -oDX2010
+        7z x DX2010.exe DXSDK/Lib/x86 -oDX2010
+        rm -fR DX*.exe
+ 
+    - name:  Build
+      run:   msbuild 0CC-FamiTracker.vcxproj /m /verbosity:minimal /p:Configuration=Release
+
+    - name:  Upload
+      uses:  actions/upload-artifact@v1.0.0
       with:
         name: build
         path: Release\0CC-FamiTracker.exe
